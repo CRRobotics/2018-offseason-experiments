@@ -31,11 +31,13 @@ public abstract class AutoCommand extends Command {
     /**
      * Implement this method to create auto routine.
      * Call {@link #goToPosition(Position)} and {@link #doCommand(Command)} to add actions.
+     * Chain {@link Action#with(Command)} calls afterwards to add more Commands in parallel.
      */
     protected abstract void sequence();
 
     /**
      * Called every time the robot needs to travel to generate a command that can handle that.
+     * Can be overridden on a per-Action basis by passing a {@link TravelMethod} to {@link Action#Action(Position, TravelMethod)}
      * @param destination The intended destination of the robot.
      * @param current The current position of the robot.
      * @return A command that will move the robot to the destination.
@@ -59,7 +61,7 @@ public abstract class AutoCommand extends Command {
     /**
      * Tells the robot to travel to a position.
      * @param p The position to travel to.
-     * @return The created action, for chaining {@link Action#with(Command)}
+     * @return The created {@link Action}, for chaining {@link Action#with(Command)}
      */
     protected Action goToPosition(Position p) {
         Action tpa = new Action(p);
@@ -68,9 +70,34 @@ public abstract class AutoCommand extends Command {
     }
 
     /**
+     * Tells the robot to travel to a position.
+     * @param x The x position to travel to.
+     * @param y The y position to travel to.
+     * @return The created {@link Action}, for chaining {@link Action#with(Command)}
+     */
+    protected Action goToPosition(double x, double y) {
+        Action tpa = new Action(new Position(x, y));
+        actions.add(tpa);
+        return tpa;
+    }
+
+    /**
+     * Tells the robot to travel to a position.
+     * @param x The x position to travel to.
+     * @param y The y position to travel to.
+     * @param angle The angle that the robot should be facing.
+     * @return The created {@link Action}, for chaining {@link Action#with(Command)}
+     */
+    protected Action goToPosition(double x, double y, double angle) {
+        Action tpa = new Action(new Position(x, y, angle % 360));
+        actions.add(tpa);
+        return tpa;
+    }
+
+    /**
      * Perform a command while stationary.
      * @param cmd The Command to execute.
-     * @return The created action, for chaining {@link Action#with(Command)}
+     * @return The created {@link Action}, for chaining {@link Action#with(Command)}
      */
     protected Action doCommand(Command cmd) {
         Action a = new Action(cmd);
@@ -79,7 +106,7 @@ public abstract class AutoCommand extends Command {
     }
 
 
-    // Command stuff below
+    // Command framework compatibility stuff below
 
     private int step;
     private boolean running;
@@ -111,7 +138,14 @@ public abstract class AutoCommand extends Command {
         } else {
             // Add driving command if there is a destination specified
             if (currentAction.getDestination().isPresent()) {
-                currentAction.with(travelMethod(currentAction.getDestination().get(), currentPosition()));
+                Command traveler;
+                // Use alternate travel method instead of default, if specified.
+                if (currentAction.getTravelMethod().isPresent()) {
+                    traveler = currentAction.getTravelMethod().get().generate(currentAction.getDestination().get(), currentPosition());
+                } else {
+                    traveler = travelMethod(currentAction.getDestination().get(), currentPosition());
+                }
+                currentAction.with(traveler);
                 lastDestination = Optional.of(currentAction.getDestination().get().clone());
             }
 
@@ -124,9 +158,7 @@ public abstract class AutoCommand extends Command {
      * like shutting off a motor that was being used in the command.
      */
     @Override
-    protected void end() {
-        super.end();
-    }
+    protected abstract void end();
 
     /**
      * Called when the command ends because somebody called {@link Command#cancel() cancel()} or

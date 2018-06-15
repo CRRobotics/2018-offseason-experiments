@@ -16,6 +16,7 @@ import java.util.Optional;
 public class Action {
     private List<Command> commands;
     private Optional<Position> destination;
+    private Optional<TravelMethod> travelMethod;
 
     private AnonymousCommandGroup group;
     private boolean running = false;
@@ -26,6 +27,7 @@ public class Action {
     public Action() {
         commands = new ArrayList<>();
         destination = Optional.empty();
+        travelMethod = Optional.empty();
     }
 
     /**
@@ -42,7 +44,17 @@ public class Action {
      * @param pos The target destination.
      */
     public Action(Position pos) {
+        this(pos, null);
+    }
+
+    /**
+     * Create an Action with the given position as the target destination and the given method as the way to get there.
+     * @param pos The target destination.
+     * @param method The way to get to the target.
+     */
+    public Action(Position pos, TravelMethod method) {
         destination = Optional.of(pos);
+        travelMethod = Optional.ofNullable(method);
     }
 
     /**
@@ -61,6 +73,10 @@ public class Action {
      */
     Optional<Position> getDestination() {
         return destination;
+    }
+
+    Optional<TravelMethod> getTravelMethod() {
+        return travelMethod;
     }
 
     /**
