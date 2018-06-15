@@ -4,9 +4,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 
 /**
+ * A class that can be extended to easily create auto routines.
+ *
  * Created by Jack Greenberg <theProgrammerJack@gmail.com> on 6/14/2018.
  * Part of 2018-offseason-experiments.
  */
@@ -14,7 +17,13 @@ public abstract class AutoCommand extends Command {
     private List<Action> actions;
     private Queue<Position> positions;
 
+    private Optional<Position> lastDestination;
+
+    /**
+     * Creates a new AutoCommand
+     */
     public AutoCommand() {
+        lastDestination = Optional.empty();
         actions = new LinkedList<>();
         sequence();
     }
@@ -39,14 +48,34 @@ public abstract class AutoCommand extends Command {
      */
     protected abstract Position currentPosition();
 
+    /**
+     * Returns the last destination specified by the auto routine.
+     * @return The last destination specified by the auto routine.
+     */
+    protected Optional<Position> getLastDestination() {
+        return lastDestination;
+    }
+
+    /**
+     * Tells the robot to travel to a position.
+     * @param p The position to travel to.
+     * @return The created action, for chaining {@link Action#with(Command)}
+     */
     protected Action goToPosition(Position p) {
         Action tpa = new Action(p);
         actions.add(tpa);
         return tpa;
     }
 
-    protected void doCommand(Command cmd) {
-        actions.add(new Action(cmd));
+    /**
+     * Perform a command while stationary.
+     * @param cmd The Command to execute.
+     * @return The created action, for chaining {@link Action#with(Command)}
+     */
+    protected Action doCommand(Command cmd) {
+        Action a = new Action(cmd);
+        actions.add(a);
+        return a;
     }
 
 
@@ -83,9 +112,10 @@ public abstract class AutoCommand extends Command {
             // Add driving command if there is a destination specified
             if (currentAction.getDestination().isPresent()) {
                 currentAction.with(travelMethod(currentAction.getDestination().get(), currentPosition()));
+                lastDestination = Optional.of(currentAction.getDestination().get().clone());
             }
 
-            currentAction.run();
+            currentAction.begin();
         }
     }
 

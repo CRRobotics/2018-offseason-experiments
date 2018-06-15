@@ -2,11 +2,17 @@ package org.team639.lib.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
+/**
+ * A CommandGroup that can be instantiated anonymously.
+ */
 public abstract class AnonymousCommandGroup extends CommandGroup {
     public AnonymousCommandGroup() {
         init();
     }
 
+    /**
+     * Place addParallel and addSequential calls that would normally go in the CommandGroup constructor here.
+     */
     protected abstract void init();
 
     /**
