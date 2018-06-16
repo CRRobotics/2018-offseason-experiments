@@ -13,9 +13,9 @@ public class DoubleLogitechAttack3 extends JoystickManager {
         rightStick = new Joystick(1);
     }
 
-    public DoubleLogitechAttack3(int port1, int port2) {
-        leftStick = new Joystick(port1);
-        rightStick = new Joystick(port2);
+    public DoubleLogitechAttack3(int leftPort, int rightPort) {
+        leftStick = new Joystick(leftPort);
+        rightStick = new Joystick(rightPort);
     }
 
     /**

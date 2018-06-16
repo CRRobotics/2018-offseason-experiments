@@ -2,6 +2,7 @@ package org.team639.robot;
 
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
+import org.team639.lib.controls.DoubleLogitechAttack3;
 import org.team639.lib.controls.JoystickManager;
 import org.team639.lib.controls.LogitechF310;
 import org.team639.robot.commands.drive.AutoTurnToAngle;
@@ -13,12 +14,11 @@ import static org.team639.lib.controls.LogitechF310.ControllerAxis.LeftTrigger;
 /**
  * Operator Interface
  * Manages the interaction between the drive team and the robot
- * Part of 2018Robot.
+ * Part of 2018-offseason-experiments.
  */
 public class OI {
 
-    public static final JoystickManager drive = new LogitechF310(0); // new DoubleLogitechAttack3(); // new LogitechF310(0);
-    public static final JoystickManager controller = new LogitechF310(1);
+    public static final JoystickManager drive = new DoubleLogitechAttack3(0, 1);
 
     /**
      * Maps all of the buttons.
@@ -32,13 +32,13 @@ public class OI {
 //                return drive.getControllerAxis(LeftTrigger) >= 0.25;
 //            }
 //        };
-        drive.mapButton(LogitechF310.Buttons.LB, new ShiftLow(), JoystickManager.MappingType.WhenPressed);
-        drive.mapButton(LogitechF310.Buttons.B, new ZeroYaw(), JoystickManager.MappingType.WhenPressed);
-
-        drive.mapButton(LogitechF310.Buttons.POVLeft, new AutoTurnToAngle(180), JoystickManager.MappingType.WhenPressed);
-        drive.mapButton(LogitechF310.Buttons.POVUp, new AutoTurnToAngle(90), JoystickManager.MappingType.WhenPressed);
-        drive.mapButton(LogitechF310.Buttons.POVRight, new AutoTurnToAngle(0), JoystickManager.MappingType.WhenPressed);
-        drive.mapButton(LogitechF310.Buttons.POVDown, new AutoTurnToAngle(270), JoystickManager.MappingType.WhenPressed);
+//        drive.mapButton(LogitechF310.Buttons.LB, new ShiftLow(), JoystickManager.MappingType.WhenPressed);
+//        drive.mapButton(LogitechF310.Buttons.B, new ZeroYaw(), JoystickManager.MappingType.WhenPressed);
+//
+//        drive.mapButton(LogitechF310.Buttons.POVLeft, new AutoTurnToAngle(180), JoystickManager.MappingType.WhenPressed);
+//        drive.mapButton(LogitechF310.Buttons.POVUp, new AutoTurnToAngle(90), JoystickManager.MappingType.WhenPressed);
+//        drive.mapButton(LogitechF310.Buttons.POVRight, new AutoTurnToAngle(0), JoystickManager.MappingType.WhenPressed);
+//        drive.mapButton(LogitechF310.Buttons.POVDown, new AutoTurnToAngle(270), JoystickManager.MappingType.WhenPressed);
     }
 
 
