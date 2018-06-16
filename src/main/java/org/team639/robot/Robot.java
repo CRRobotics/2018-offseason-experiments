@@ -76,9 +76,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         RobotMap.init(); // Initialize all sensors, motors, etc.
-//
-//        VideoSource c = CameraServer.getInstance().startAutomaticCapture();
-//        c.setVideoMode(VideoMode.PixelFormat.kMJPEG, 320, 240, 30);
 
         SmartDashboard.putNumber("drive p", HIGH_DRIVE_P);
         SmartDashboard.putNumber("drive i", HIGH_DRIVE_I);
@@ -88,7 +85,7 @@ public class Robot extends TimedRobot {
         driveTrain = new DriveTrain();
 
         // Driver options init
-        driveMode = new SendableChooser<>(  );
+        driveMode = new SendableChooser<>();
         driveMode.addDefault("2 Joystick Arcade Right", DriveMode.Arcade2JoystickRightDrive);
         driveMode.addObject("1 Joystick Arcade", DriveMode.Arcade1Joystick);
         driveMode.addObject("Tank", DriveMode.Tank);
@@ -110,6 +107,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("Auto delay", 0);
         autoSelector = new SendableChooser<>();
+        autoSelector.addDefault("Example (Test)", ExampleAuto.class);
         SmartDashboard.putData("Auto selector", autoSelector);
 
         OI.mapButtons(); // Map all of the buttons on the controller(s)
@@ -134,16 +132,17 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         StartingPosition position = startingPosition.getSelected();
-//        try { // This try/catch is for the call to Class<? extends Command>.newInstance that constructs the auto (hopefully).
-//            auto = new AutoBoilerplate(autoSelector.getSelected().newInstance(), SmartDashboard.getNumber("Auto delay", 0));
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
+        try { // This try/catch is for the call to Class<? extends Command>.newInstance that constructs the auto (hopefully).
+            auto = autoSelector.getSelected().newInstance();
+            auto.start();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
 //            auto = new AutoCrossLine();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
 //            auto = new AutoCrossLine();
-//        }
-        auto.start();
+        }
+//        auto.start();
     }
 
     /**
