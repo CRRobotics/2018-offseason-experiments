@@ -23,9 +23,6 @@ public abstract class AutoCommand extends Command {
      * Creates a new AutoCommand
      */
     public AutoCommand() {
-        lastDestination = Optional.empty();
-        actions = new LinkedList<>();
-        sequence();
     }
 
     /**
@@ -116,6 +113,10 @@ public abstract class AutoCommand extends Command {
      */
     @Override
     protected void initialize() {
+        lastDestination = Optional.empty();
+        actions = new LinkedList<>();
+        sequence();
+
         step = 0;
         running = true;
         System.out.println("AutoCommand initialized");
@@ -162,7 +163,7 @@ public abstract class AutoCommand extends Command {
      * like shutting off a motor that was being used in the command.
      */
     @Override
-    protected abstract void end();
+    protected void end() {}
 
     /**
      * Called when the command ends because somebody called {@link Command#cancel() cancel()} or

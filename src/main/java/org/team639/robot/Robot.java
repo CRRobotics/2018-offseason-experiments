@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.team639.lib.auto.AutoCommand;
 import org.team639.robot.commands.auto.*;
 import org.team639.robot.commands.drive.DriveMode;
 import org.team639.robot.subsystems.DriveTrain;
@@ -32,7 +33,7 @@ public class Robot extends TimedRobot {
     private static SendableChooser<DriveMode> driveMode;
     private static SendableChooser<ControlMode> driveTalonControlMode;
     private static SendableChooser<StartingPosition> startingPosition;
-    private static SendableChooser<Class<? extends Command>> autoSelector;
+    private static SendableChooser<AutoCommand> autoSelector;
 
     /**
      * Returns a reference to the robot's drivetrain.
@@ -107,7 +108,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putNumber("Auto delay", 0);
         autoSelector = new SendableChooser<>();
-        autoSelector.addDefault("Example (Test)", ExampleAuto.class);
+        autoSelector.addDefault("Example (Test)", new ExampleAuto());
         SmartDashboard.putData("Auto selector", autoSelector);
 
         OI.mapButtons(); // Map all of the buttons on the controller(s)
@@ -131,18 +132,9 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        StartingPosition position = startingPosition.getSelected();
-        try { // This try/catch is for the call to Class<? extends Command>.newInstance that constructs the auto (hopefully).
-            auto = autoSelector.getSelected().newInstance();
-            auto.start();
-            System.out.println("Auto started");
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-//            auto = new AutoCrossLine();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-//            auto = new AutoCrossLine();
-        }
+        auto = autoSelector.getSelected();
+        auto.start();
+        System.out.println("Auto started");
 //        auto.start();
     }
 
@@ -176,15 +168,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
 
-        SmartDashboard.putString("Selected auto mode", autoSelector.getSelected().getSimpleName());
-
-//        SmartDashboard.putNumber("lift pos", lift.getEncPos());
-//        SmartDashboard.putNumber("pdp energy", RobotMap.getPdp().getTotalEnergy());
-
-//        SmartDashboard.putNumber("lift speed", Math.abs(lift.getEncVelocity()));
-//        SmartDashboard.putNumber("lift velocity", lift.getEncVelocity());
-
-//        SmartDashboard.putNumber("lift enc", lift.getEncPos());
+        SmartDashboard.putString("Selected auto mode", autoSelector.getSelected().getClass().getSimpleName());
 
         SmartDashboard.putBoolean("drivetrain encoders", driveTrain.encodersPresent());
         SmartDashboard.putNumber("Left speed", driveTrain.getLeftEncVelocity());

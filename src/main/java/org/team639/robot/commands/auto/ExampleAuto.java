@@ -19,13 +19,4 @@ public class ExampleAuto extends BasicAutoCommand {
         goToPosition(-200, 50);
         goToPosition(-225, 100);
     }
-
-    /**
-     * Called when the command ended peacefully. This is where you may want to wrap up loose ends,
-     * like shutting off a motor that was being used in the command.
-     */
-    @Override
-    protected void end() {
-
-    }
 }
