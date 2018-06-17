@@ -10,6 +10,7 @@ import org.team639.robot.commands.drive.ShiftLow;
 import org.team639.robot.commands.drive.ZeroYaw;
 
 import static org.team639.lib.controls.LogitechF310.ControllerAxis.LeftTrigger;
+import static org.team639.robot.Constants.JOYSTICK_DEADZONE;
 
 /**
  * Operator Interface
@@ -18,7 +19,7 @@ import static org.team639.lib.controls.LogitechF310.ControllerAxis.LeftTrigger;
  */
 public class OI {
 
-    public static final JoystickManager drive = new DoubleLogitechAttack3(0, 1);
+    public static final JoystickManager drive = new DoubleLogitechAttack3(0, 1, JOYSTICK_DEADZONE);
 
     /**
      * Maps all of the buttons.

@@ -78,6 +78,6 @@ public class Constants {
         public static final double ADF_TOLERANCE = 800;
     }
 
-    public static final double JOYSTICK_DEADZONE = 0.05;
+    public static final double JOYSTICK_DEADZONE = 0.1;
     public static final double CONTROLLER_JOYSTICK_DEADZONE = 0.2;
 }

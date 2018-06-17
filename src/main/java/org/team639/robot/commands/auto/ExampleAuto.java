@@ -15,9 +15,9 @@ public class ExampleAuto extends BasicAutoCommand {
      */
     @Override
     protected void sequence() {
-        goToPosition(50, 50);
-        goToPosition(200, 50);
-        goToPosition(225, 100);
+        goToPosition(-50, 50);
+        goToPosition(-200, 50);
+        goToPosition(-225, 100);
     }
 
     /**

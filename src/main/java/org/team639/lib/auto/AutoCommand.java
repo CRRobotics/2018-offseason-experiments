@@ -118,6 +118,7 @@ public abstract class AutoCommand extends Command {
     protected void initialize() {
         step = 0;
         running = true;
+        System.out.println("AutoCommand initialized");
     }
 
     /**
@@ -125,6 +126,7 @@ public abstract class AutoCommand extends Command {
      */
     @Override
     protected void execute() {
+        System.out.println("AutoCommand execute");
         if (step >= actions.size()) {
             running = false;
             return;
@@ -142,7 +144,9 @@ public abstract class AutoCommand extends Command {
                 // Use alternate travel method instead of default, if specified.
                 if (currentAction.getTravelMethod().isPresent()) {
                     traveler = currentAction.getTravelMethod().get().generate(currentAction.getDestination().get(), currentPosition());
+                    System.out.println("other travel method specified");
                 } else {
+                    System.out.println("Using default travel method");
                     traveler = travelMethod(currentAction.getDestination().get(), currentPosition());
                 }
                 currentAction.with(traveler);
@@ -187,6 +191,7 @@ public abstract class AutoCommand extends Command {
      */
     @Override
     protected boolean isFinished() {
+        if (!running) System.out.println("AutoCommand finished");
         return !running;
     }
 }

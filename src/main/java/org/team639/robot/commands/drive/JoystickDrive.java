@@ -76,8 +76,8 @@ public class JoystickDrive extends Command {
         double speed;
         double angle;
 
-        double scale = 1 - 0.8 * OI.drive.getControllerAxis(LogitechF310.ControllerAxis.RightTrigger);
-        if (scale < 0.2) scale = 0.2;
+        double scale = 1;// 1 - 0.8 * OI.drive.getControllerAxis(LogitechF310.ControllerAxis.RightTrigger);
+//        if (scale < 0.2) scale = 0.2;
         mode = Robot.getDriveMode();
         switch (mode) {
             case Tank:
@@ -160,8 +160,6 @@ public class JoystickDrive extends Command {
 //        }
         lastSetpointSpeed = speed;
         lastSetpointTurning = turning;
-
-        if (speed < -.01) turning *= -1;
 
         driveTrain.setSpeedsPercent(speed + turning, speed - turning);
     }

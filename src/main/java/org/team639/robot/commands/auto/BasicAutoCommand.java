@@ -30,7 +30,7 @@ public abstract class BasicAutoCommand extends AutoCommand {
      */
     @Override
     protected Command travelMethod(Position destination, Position current) {
-        double angle = Math.atan2(destination.y - current.y, destination.x - current.x);
+        double angle = Math.toDegrees(Math.atan2(destination.y - current.y, destination.x - current.x));
         double distance = AngleMath.distance(destination.x, destination.y, current.x, current.y);
         return new AnonymousCommandGroup() {
             @Override

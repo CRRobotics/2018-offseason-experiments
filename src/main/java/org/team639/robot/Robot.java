@@ -135,6 +135,7 @@ public class Robot extends TimedRobot {
         try { // This try/catch is for the call to Class<? extends Command>.newInstance that constructs the auto (hopefully).
             auto = autoSelector.getSelected().newInstance();
             auto.start();
+            System.out.println("Auto started");
         } catch (InstantiationException e) {
             e.printStackTrace();
 //            auto = new AutoCrossLine();

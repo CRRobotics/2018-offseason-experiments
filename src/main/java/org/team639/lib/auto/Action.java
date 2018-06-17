@@ -53,6 +53,7 @@ public class Action {
      * @param method The way to get to the target.
      */
     public Action(Position pos, TravelMethod method) {
+        commands = new ArrayList<>();
         destination = Optional.of(pos);
         travelMethod = Optional.ofNullable(method);
     }

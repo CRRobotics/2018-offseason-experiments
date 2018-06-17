@@ -8,14 +8,20 @@ public class DoubleLogitechAttack3 extends JoystickManager {
     private Joystick leftStick;
     private Joystick rightStick;
 
+    private double deadzone;
+
     public DoubleLogitechAttack3() {
-        leftStick = new Joystick(0);
-        rightStick = new Joystick(1);
+        this(0, 1);
     }
 
     public DoubleLogitechAttack3(int leftPort, int rightPort) {
+        this(leftPort, rightPort, 0);
+    }
+
+    public DoubleLogitechAttack3(int leftPort, int rightPort, double deadzone) {
         leftStick = new Joystick(leftPort);
         rightStick = new Joystick(rightPort);
+        this.deadzone = deadzone;
     }
 
     /**
@@ -25,7 +31,7 @@ public class DoubleLogitechAttack3 extends JoystickManager {
      */
     @Override
     public double getLeftStickY() {
-        return -1 * leftStick.getRawAxis(1);
+        return -1 * applyDeadzone(leftStick.getRawAxis(1));
     }
 
     /**
@@ -35,7 +41,7 @@ public class DoubleLogitechAttack3 extends JoystickManager {
      */
     @Override
     public double getRightStickY() {
-        return -1 * rightStick.getRawAxis(1);
+        return -1 * applyDeadzone(rightStick.getRawAxis(1));
     }
 
     /**
@@ -45,7 +51,7 @@ public class DoubleLogitechAttack3 extends JoystickManager {
      */
     @Override
     public double getLeftStickX() {
-        return leftStick.getRawAxis(0);
+        return applyDeadzone(leftStick.getRawAxis(0));
     }
 
     /**
@@ -55,7 +61,7 @@ public class DoubleLogitechAttack3 extends JoystickManager {
      */
     @Override
     public double getRightStickX() {
-        return rightStick.getRawAxis(0);
+        return applyDeadzone(rightStick.getRawAxis(0));
     }
 
     /**
@@ -90,5 +96,10 @@ public class DoubleLogitechAttack3 extends JoystickManager {
     @Override
     public double getControllerAxis(ControllerAxisType axis) {
         return 0;
+    }
+
+    private double applyDeadzone(double val) {
+        if (Math.abs(val) < deadzone) return 0;
+        else return val;
     }
 }
