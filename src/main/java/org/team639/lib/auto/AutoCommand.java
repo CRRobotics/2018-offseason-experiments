@@ -100,11 +100,83 @@ public abstract class AutoCommand extends Command {
         return a;
     }
 
+    /**
+     * Launches a specified command in parallel such that it is not influenced and can not influence the runnning time
+     * of other parts of the auto routine.
+     * Can be waited for at a later point using {@link #waitFor(Action)}.
+     * Should not be used with any command that manipulates the drive train or other systems necessary for driving.
+     * @param cmd The command to launch in parallel.
+     * @return The action, for chaining with {@link Action#with(Command)} if desired or using with {@link #waitFor(Action)}
+     */
+    protected Action launch(Command cmd) {
+        Action a = Action.parallel(cmd);
+        actions.add(a);
+        return a;
+    }
+
+    /**
+     * Waits for an Action launched in parallel to finish.
+     * If a non parallel Action is passed in, nothing will happen.
+     * @param parallelAction The Action to wait for.
+     */
+    protected void waitFor(Action parallelAction) {
+        if (parallelAction.isParallel()) {
+            actions.add(new Action() {
+                /**
+                 * Begins running the Action.
+                 */
+                @Override
+                public void begin() {
+                }
+
+                /**
+                 * Returns whether or not all parts of the action have finished executing.
+                 *
+                 * @return Whether or not all parts of the action have finished executing.
+                 */
+                @Override
+                public boolean isFinished() {
+                    return parallelAction.isFinished();
+                }
+            });
+        }
+    }
+
+    /**
+     * Interrupts an Action launched in parallel if it isn't finished.
+     * If a non parallel Action is passed in, nothing will happen.
+     * @param parallelAction The Action to interrupt.
+     */
+    protected void interruptParallel(Action parallelAction) {
+        if (parallelAction.isParallel() && !parallelAction.isFinished()) {
+            actions.add(new Action() {
+                /**
+                 * Begins running the Action.
+                 */
+                @Override
+                public void begin() {
+                    parallelAction.interrupt();
+                }
+
+                /**
+                 * Returns whether or not all parts of the action have finished executing.
+                 *
+                 * @return Whether or not all parts of the action have finished executing.
+                 */
+                @Override
+                public boolean isFinished() {
+                    return true;
+                }
+            });
+        }
+    }
+
 
     // Command framework compatibility stuff below
 
     private int step;
     private boolean running;
+    private List<Action> parallelActions;
 
     /**
      * The initialize method is called the first time this Command is run after being started.
@@ -113,6 +185,7 @@ public abstract class AutoCommand extends Command {
     protected void initialize() {
         lastDestination = Optional.empty();
         actions = new ArrayList<>();
+        parallelActions = new ArrayList<>();
         sequence();
 
         step = 0;
@@ -127,12 +200,12 @@ public abstract class AutoCommand extends Command {
     protected void execute() {
         System.out.println("AutoCommand execute");
         if (step >= actions.size()) {
-            running = false;
+            if (parallelActions.stream().allMatch(Action::isFinished)) running = false;
             return;
         }
         Action currentAction = actions.get(step);
-        if (currentAction.isRunning()) {
-            if (currentAction.isFinished()) {
+        if (currentAction.isStarted()) {
+            if (currentAction.isFinished() || (currentAction.isParallel() && step < actions.size() - 1)) {
                 step++;
                 if (step >= actions.size()) running = false;
             }
@@ -143,7 +216,7 @@ public abstract class AutoCommand extends Command {
                 // Use alternate travel method instead of default, if specified.
                 if (currentAction.getTravelMethod().isPresent()) {
                     traveler = currentAction.getTravelMethod().get().generate(currentAction.getDestination().get(), currentPosition());
-                    System.out.println("other travel method specified");
+                    System.out.println("Other travel method specified");
                 } else {
                     System.out.println("Using default travel method");
                     traveler = travelMethod(currentAction.getDestination().get(), currentPosition());
@@ -151,6 +224,8 @@ public abstract class AutoCommand extends Command {
                 currentAction.with(traveler);
                 lastDestination = Optional.of(currentAction.getDestination().get().clone());
             }
+
+            if (currentAction.isParallel()) parallelActions.add(currentAction);
 
             currentAction.begin();
         }
@@ -161,7 +236,9 @@ public abstract class AutoCommand extends Command {
      * like shutting off a motor that was being used in the command.
      */
     @Override
-    protected void end() {}
+    protected void end() {
+        running = false;
+    }
 
     /**
      * Called when the command ends because somebody called {@link Command#cancel() cancel()} or
@@ -176,6 +253,7 @@ public abstract class AutoCommand extends Command {
     @Override
     protected void interrupted() {
         actions.get(step).interrupt();
+        running = false;
     }
 
     /**

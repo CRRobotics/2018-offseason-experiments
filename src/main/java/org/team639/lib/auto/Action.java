@@ -19,8 +19,11 @@ public class Action {
     private Optional<TravelMethod> travelMethod = Optional.empty();
     private Optional<Double> timeout = Optional.empty();
 
+    private boolean parallel = false;
+
     private AnonymousCommandGroup group;
-    private boolean running = false;
+    private boolean started = false;
+    private boolean finished = false;
 
     /**
      * Create an empty Action.
@@ -29,7 +32,8 @@ public class Action {
     }
 
     /**
-     * Create an Action containing only the given Command
+     * Create an Action containing only the given Command.
+     * Should not be used with any command that manipulates the drive train or other systems necessary for driving.
      * @param cmd The command to include.
      */
     public Action(Command cmd) {
@@ -55,8 +59,15 @@ public class Action {
         travelMethod = Optional.ofNullable(method);
     }
 
+    public static Action parallel(Command cmd) {
+        Action a = new Action(cmd);
+        a.parallel = true;
+        return a;
+    }
+
     /**
-     * Adds the given Command to the Action
+     * Adds the given Command to the Action.
+     * Should not be used with any command that manipulates the drive train or other systems necessary for driving.
      * @param cmd The Command to add.
      * @return The Action, to allow for chaining.
      */
@@ -81,6 +92,10 @@ public class Action {
         return travelMethod;
     }
 
+    public boolean isParallel() {
+        return parallel;
+    }
+
     /**
      * Set a time limit for the action.
      * @param timeout Time limit in seconds that the action should run for.
@@ -91,11 +106,11 @@ public class Action {
     }
 
     /**
-     * Returns whether or not the Action is currently running.
-     * @return Whether or not the Action is currently running.
+     * Returns whether or not the Action has been started.
+     * @return Whether or not the Action has been started.
      */
-    public boolean isRunning() {
-        return running;
+    public boolean isStarted() {
+        return started;
     }
 
     /**
@@ -112,7 +127,7 @@ public class Action {
             }
         };
         group.start();
-        running = true;
+        started = true;
     }
 
     /**
@@ -120,8 +135,8 @@ public class Action {
      * @return Whether or not all parts of the action have finished executing.
      */
     public boolean isFinished() {
-        running = !group.isFinished();
-        return group.isFinished();
+        if (group.isFinished()) finished = true;
+        return finished;
     }
 
     /**
@@ -129,6 +144,6 @@ public class Action {
      */
     public void interrupt() {
         group.cancel();
-        running = false;
+        finished = true;
     }
 }
