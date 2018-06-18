@@ -3,7 +3,7 @@ package org.team639.lib.auto;
 import edu.wpi.first.wpilibj.command.Command;
 import org.team639.lib.commands.AnonymousCommandGroup;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +14,10 @@ import java.util.Optional;
  * Part of 2018-offseason-experiments.
  */
 public class Action {
-    private List<Command> commands;
-    private Optional<Position> destination;
-    private Optional<TravelMethod> travelMethod;
+    private List<Command> commands = new LinkedList<>();
+    private Optional<Position> destination = Optional.empty();
+    private Optional<TravelMethod> travelMethod = Optional.empty();
+    private Optional<Double> timeout = Optional.empty();
 
     private AnonymousCommandGroup group;
     private boolean running = false;
@@ -25,9 +26,6 @@ public class Action {
      * Create an empty Action.
      */
     public Action() {
-        commands = new ArrayList<>();
-        destination = Optional.empty();
-        travelMethod = Optional.empty();
     }
 
     /**
@@ -53,7 +51,6 @@ public class Action {
      * @param method The way to get to the target.
      */
     public Action(Position pos, TravelMethod method) {
-        commands = new ArrayList<>();
         destination = Optional.of(pos);
         travelMethod = Optional.ofNullable(method);
     }
@@ -69,15 +66,28 @@ public class Action {
     }
 
     /**
-     * Returns the target destination of the Action.
-     * @return The target destination of the Action.
+     * Returns the Optional target destination of the Action.
+     * @return The Optional target destination of the Action.
      */
     Optional<Position> getDestination() {
         return destination;
     }
 
+    /**
+     * Returns the Optional TravelMethod implementation for this action.
+     * @return The Optional TravelMethod implementation for this action.
+     */
     Optional<TravelMethod> getTravelMethod() {
         return travelMethod;
+    }
+
+    /**
+     * Set a time limit for the action.
+     * @param timeout Time limit in seconds that the action should run for.
+     */
+    public void timeout(double timeout) {
+        if (timeout <= 0) throw new IllegalArgumentException("Timeout is <= 0");
+        else this.timeout = Optional.of(timeout);
     }
 
     /**
@@ -95,6 +105,7 @@ public class Action {
         group = new AnonymousCommandGroup() {
             @Override
             protected void init() {
+                timeout.ifPresent(t -> setTimeout(t));
                 for (Command cmd : commands) {
                     addParallel(cmd);
                 }

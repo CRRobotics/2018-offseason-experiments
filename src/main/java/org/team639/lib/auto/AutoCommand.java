@@ -2,10 +2,9 @@ package org.team639.lib.auto;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Queue;
 
 /**
  * A class that can be extended to easily create auto routines.
@@ -15,7 +14,6 @@ import java.util.Queue;
  */
 public abstract class AutoCommand extends Command {
     private List<Action> actions;
-    private Queue<Position> positions;
 
     private Optional<Position> lastDestination;
 
@@ -114,7 +112,7 @@ public abstract class AutoCommand extends Command {
     @Override
     protected void initialize() {
         lastDestination = Optional.empty();
-        actions = new LinkedList<>();
+        actions = new ArrayList<>();
         sequence();
 
         step = 0;
