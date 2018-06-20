@@ -29,6 +29,13 @@ public class RobotMap {
     // NAVX
     private static AHRS ahrs;
 
+    private static DigitalOutput redLED1;
+    private static DigitalOutput redLED2;
+    private static DigitalOutput blueLED1;
+    private static DigitalOutput blueLED2;
+    private static DigitalOutput greenLED1;
+    private static DigitalOutput greenLED2;
+
     private RobotMap() {
     }
 
@@ -54,6 +61,13 @@ public class RobotMap {
 
             // NAVX
             ahrs = new AHRS(SPI.Port.kMXP);
+
+            redLED1 = new DigitalOutput(18);
+            redLED2 = new DigitalOutput(19);
+            blueLED1 = new DigitalOutput(12);
+            blueLED2 = new DigitalOutput(13);
+            greenLED1 = new DigitalOutput(10);
+            greenLED2 = new DigitalOutput(11);
 
             initialized = true;
         }
@@ -129,5 +143,29 @@ public class RobotMap {
      */
     public static AHRS getAhrs() {
         return ahrs;
+    }
+
+    public static DigitalOutput getRedLED1() {
+        return redLED1;
+    }
+
+    public static DigitalOutput getRedLED2() {
+        return redLED2;
+    }
+
+    public static DigitalOutput getBlueLED1() {
+        return blueLED1;
+    }
+
+    public static DigitalOutput getBlueLED2() {
+        return blueLED2;
+    }
+
+    public static DigitalOutput getGreenLED1() {
+        return greenLED1;
+    }
+
+    public static DigitalOutput getGreenLED2() {
+        return greenLED2;
     }
 }

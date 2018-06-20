@@ -135,8 +135,8 @@ public class Action {
      * @return Whether or not all parts of the action have finished executing.
      */
     public boolean isFinished() {
-        if (group.isFinished()) finished = true;
-        return finished;
+        if (group.isCompleted()) finished = true;
+        return group.isCompleted();
     }
 
     /**

@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  * A CommandGroup that can be instantiated anonymously.
  */
 public abstract class AnonymousCommandGroup extends CommandGroup {
+    private boolean interrupted = false;
+
     public AnonymousCommandGroup() {
         init();
     }
@@ -15,8 +17,13 @@ public abstract class AnonymousCommandGroup extends CommandGroup {
      */
     protected abstract void init();
 
+    @Override
+    protected void interrupted() {
+        interrupted = true;
+    }
+
     /**
-     * Returns true if all the {@link Command Commands} in this group have been started and have
+     * Returns true if all the Commands in this group have been started and have
      * finished.
      * <p>
      * <p> Teams may override this method, although they should probably reference super.isFinished()
@@ -26,6 +33,6 @@ public abstract class AnonymousCommandGroup extends CommandGroup {
      */
     @Override
     public boolean isFinished() {
-        return super.isFinished();
+        return super.isFinished() || isTimedOut();
     }
 }
