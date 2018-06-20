@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team639.lib.auto.AutoCommand;
 import org.team639.robot.commands.auto.*;
 import org.team639.robot.commands.drive.DriveMode;
+import org.team639.robot.subsystems.BlueLEDs;
 import org.team639.robot.subsystems.DriveTrain;
+import org.team639.robot.subsystems.GreenLEDs;
+import org.team639.robot.subsystems.RedLEDs;
 
 import static org.team639.robot.Constants.DriveTrain.HIGH_DRIVE_D;
 import static org.team639.robot.Constants.DriveTrain.HIGH_DRIVE_I;
@@ -28,6 +31,9 @@ public class Robot extends TimedRobot {
 
     // Subsystems
     private static DriveTrain driveTrain;
+    private static RedLEDs redLEDs;
+    private static BlueLEDs blueLEDs;
+    private static GreenLEDs greenLEDs;
 
     // Driver options
     private static SendableChooser<DriveMode> driveMode;
@@ -41,6 +47,18 @@ public class Robot extends TimedRobot {
      */
     public static DriveTrain getDriveTrain() {
         return driveTrain;
+    }
+
+    public static RedLEDs getRedLEDs() {
+        return redLEDs;
+    }
+
+    public static BlueLEDs getBlueLEDs() {
+        return blueLEDs;
+    }
+
+    public static GreenLEDs getGreenLEDs() {
+        return greenLEDs;
     }
 
     /**
@@ -84,6 +102,10 @@ public class Robot extends TimedRobot {
 
         // Subsystem initializations
         driveTrain = new DriveTrain();
+        redLEDs = new RedLEDs();
+        blueLEDs = new BlueLEDs();
+        greenLEDs = new GreenLEDs();
+
 
         // Driver options init
         driveMode = new SendableChooser<>();

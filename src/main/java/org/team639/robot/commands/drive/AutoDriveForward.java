@@ -81,6 +81,7 @@ public class AutoDriveForward extends Command {
     }
 
     protected void execute() {
+        System.out.println("Driving forward");
         lTickDiff = targetLeft - driveTrain.getLeftEncPos();
         rTickDiff = targetRight - driveTrain.getRightEncPos();
 

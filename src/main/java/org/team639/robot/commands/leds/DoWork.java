@@ -32,6 +32,7 @@ public class DoWork extends Command {
      */
     @Override
     protected void execute() {
+        System.out.println("Doing work");
         double temp = timeSinceInitialized();
         if (temp - last >= 0.5) {
             last = temp;

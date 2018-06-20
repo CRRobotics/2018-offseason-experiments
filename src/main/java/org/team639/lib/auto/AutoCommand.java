@@ -123,19 +123,13 @@ public abstract class AutoCommand extends Command {
         if (parallelAction.isParallel()) {
             actions.add(new Action() {
                 /**
-                 * Begins running the Action.
-                 */
-                @Override
-                public void begin() {
-                }
-
-                /**
                  * Returns whether or not all parts of the action have finished executing.
                  *
                  * @return Whether or not all parts of the action have finished executing.
                  */
                 @Override
                 public boolean isFinished() {
+                    System.out.println(parallelAction.isFinished());
                     return parallelAction.isFinished();
                 }
             });
@@ -148,13 +142,14 @@ public abstract class AutoCommand extends Command {
      * @param parallelAction The Action to interrupt.
      */
     protected void interruptParallel(Action parallelAction) {
-        if (parallelAction.isParallel() && !parallelAction.isFinished()) {
+        if (parallelAction.isParallel()) {
             actions.add(new Action() {
                 /**
                  * Begins running the Action.
                  */
                 @Override
                 public void begin() {
+                    super.begin();
                     parallelAction.interrupt();
                 }
 
