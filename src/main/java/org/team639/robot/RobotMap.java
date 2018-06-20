@@ -62,12 +62,12 @@ public class RobotMap {
             // NAVX
             ahrs = new AHRS(SPI.Port.kMXP);
 
-            redLED1 = new DigitalOutput(18);
+            redLED1 = new DigitalOutput(10);
             redLED2 = new DigitalOutput(19);
-            blueLED1 = new DigitalOutput(12);
+            blueLED1 = new DigitalOutput(11);
             blueLED2 = new DigitalOutput(13);
-            greenLED1 = new DigitalOutput(10);
-            greenLED2 = new DigitalOutput(11);
+            greenLED1 = new DigitalOutput(12);
+            greenLED2 = new DigitalOutput(18);
 
             initialized = true;
         }
