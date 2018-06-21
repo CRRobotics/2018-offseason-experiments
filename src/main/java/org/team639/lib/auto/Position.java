@@ -38,7 +38,7 @@ public class Position {
      * Creates a copy of the Position.
      * @return A copy of the Position.
      */
-    protected Position clone() {
+    public Position clone() {
         if (angle.isPresent()) return new Position(this.x, this.y, angle.get());
         else return new Position(this.x, this.y);
     }

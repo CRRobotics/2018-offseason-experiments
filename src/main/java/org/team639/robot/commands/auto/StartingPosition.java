@@ -1,18 +1,18 @@
 package org.team639.robot.commands.auto;
 
+import org.team639.lib.auto.Position;
+
 /**
  * The three possible starting positions of the robot.
  */
 public enum StartingPosition {
-    Right(115.5, 19.25),
-    Center(4.5, 19.25),
-    Left(-115.5, 19.25);
+    Right(new Position(115.5, 19.25, 90d)),
+    Center(new Position(4.5, 19.25, 90d)),
+    Left(new Position(-115.5, 19.25, 90d));
 
-    public final double x;
-    public final double y;
+    public final Position position;
 
-    StartingPosition(double x, double y) {
-        this.x = x;
-        this.y = y;
+    StartingPosition(Position pos) {
+        this.position = pos;
     }
 }

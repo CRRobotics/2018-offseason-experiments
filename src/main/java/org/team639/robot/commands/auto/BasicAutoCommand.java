@@ -18,7 +18,7 @@ public abstract class BasicAutoCommand extends AutoCommand {
     private Position startPos;
 
     public BasicAutoCommand(StartingPosition stPos) {
-        startPos = new Position(stPos.x, stPos.y);
+        startPos = stPos.position.clone();
     }
 
     /**
