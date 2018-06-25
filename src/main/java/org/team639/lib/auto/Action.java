@@ -38,7 +38,7 @@ public class Action {
      */
     public Action(Command cmd) {
         this();
-        commands.add(cmd);
+        with(cmd);
     }
 
     /**

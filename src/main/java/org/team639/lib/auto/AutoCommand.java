@@ -54,14 +54,22 @@ public abstract class AutoCommand extends Command {
     }
 
     /**
+     * Add the given action to the list for execution and return it for chaining.
+     * @param action The action to add.
+     * @return The same action returned for chaining.
+     */
+    protected Action runAction(Action action) {
+        actions.add(action);
+        return action;
+    }
+
+    /**
      * Tells the robot to travel to a position.
      * @param p The position to travel to.
      * @return The created {@link Action}, for chaining {@link Action#with(Command)}
      */
     protected Action goToPosition(Position p) {
-        Action tpa = new Action(p);
-        actions.add(tpa);
-        return tpa;
+        return runAction(new Action(p));
     }
 
     /**
@@ -71,9 +79,7 @@ public abstract class AutoCommand extends Command {
      * @return The created {@link Action}, for chaining {@link Action#with(Command)}
      */
     protected Action goToPosition(double x, double y) {
-        Action tpa = new Action(new Position(x, y));
-        actions.add(tpa);
-        return tpa;
+        return goToPosition(new Position(x, y));
     }
 
     /**
@@ -84,9 +90,7 @@ public abstract class AutoCommand extends Command {
      * @return The created {@link Action}, for chaining {@link Action#with(Command)}
      */
     protected Action goToPosition(double x, double y, double angle) {
-        Action tpa = new Action(new Position(x, y, angle % 360));
-        actions.add(tpa);
-        return tpa;
+        return goToPosition(new Position(x, y, angle % 360));
     }
 
     /**
@@ -95,9 +99,7 @@ public abstract class AutoCommand extends Command {
      * @return The created {@link Action}, for chaining {@link Action#with(Command)}
      */
     protected Action doCommand(Command cmd) {
-        Action a = new Action(cmd);
-        actions.add(a);
-        return a;
+        return runAction(new Action(cmd));
     }
 
     /**
@@ -109,9 +111,7 @@ public abstract class AutoCommand extends Command {
      * @return The action, for chaining with {@link Action#with(Command)} if desired or using with {@link #waitFor(Action)}
      */
     protected Action launch(Command cmd) {
-        Action a = Action.parallel(cmd);
-        actions.add(a);
-        return a;
+        return runAction(Action.parallel(cmd));
     }
 
     /**
@@ -121,7 +121,7 @@ public abstract class AutoCommand extends Command {
      */
     protected void waitFor(Action parallelAction) {
         if (parallelAction.isParallel()) {
-            actions.add(new Action() {
+            runAction(new Action() {
                 /**
                  * Returns whether or not all parts of the action have finished executing.
                  *
@@ -143,7 +143,7 @@ public abstract class AutoCommand extends Command {
      */
     protected void interruptParallel(Action parallelAction) {
         if (parallelAction.isParallel()) {
-            actions.add(new Action() {
+            runAction(new Action() {
                 /**
                  * Begins running the Action.
                  */
