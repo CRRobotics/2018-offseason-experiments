@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.team639.lib.auto.AutoCommand;
+import org.team639.lib.auto.Position;
 import org.team639.robot.commands.auto.*;
 import org.team639.robot.commands.drive.DriveMode;
 import org.team639.robot.subsystems.BlueLEDs;
@@ -34,6 +35,8 @@ public class Robot extends TimedRobot {
     private static RedLEDs redLEDs;
     private static BlueLEDs blueLEDs;
     private static GreenLEDs greenLEDs;
+
+    private static DriveTracker driveTracker;
 
     // Driver options
     private static SendableChooser<DriveMode> driveMode;
@@ -81,6 +84,30 @@ public class Robot extends TimedRobot {
         return startingPosition.getSelected();
     }
 
+    /**
+     * Returns the approximate x location of the robot reported by the drive tracker.
+     * @return The approximate x location of the robot reported by the drive tracker.
+     */
+    public static double getTrackedX() {
+        return driveTracker.getX();
+    }
+
+    /**
+     * Returns the approximate y location of the robot reported by the drive tracker.
+     * @return The approximate y location of the robot reported by the drive tracker.
+     */
+    public static double getTrackedY() {
+        return driveTracker.getY();
+    }
+
+    /**
+     * Resets the drive tracker to the specified coordinates.
+     * @param x The x value to reset to.
+     * @param y The y value to reset to.
+     */
+    public static void resetTrackedPosition(double x, double y) {
+        driveTracker.reset(x, y);
+    }
 
     /**
      * Robot-wide initialization code should go here.
@@ -133,6 +160,8 @@ public class Robot extends TimedRobot {
         autoSelector.addDefault("Example (Test)", new ExampleAuto());
         SmartDashboard.putData("Auto selector", autoSelector);
 
+        driveTracker = new DriveTracker(0, 0);
+
         OI.mapButtons(); // Map all of the buttons on the controller(s)
     }
 
@@ -155,6 +184,9 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         auto = autoSelector.getSelected();
+        Position startPos = getStartingPosition().position;
+        driveTracker.reset(startPos.x, startPos.y);
+        driveTrain.zeroRobotYaw();
         auto.start();
         System.out.println("Auto started");
 //        auto.start();
