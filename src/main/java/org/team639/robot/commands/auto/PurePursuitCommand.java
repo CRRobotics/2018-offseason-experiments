@@ -1,43 +1,38 @@
 package org.team639.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.drive.Vector2d;
+import jaci.pathfinder.Trajectory;
+import org.team639.lib.math.AngleMath;
 import org.team639.robot.Robot;
 import org.team639.robot.subsystems.DriveTrain;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.team639.robot.Constants.DriveTrain.M_PER_S_TO_ENC_UNITS;
 
 public class PurePursuitCommand extends Command {
 
+    public static final double TOLERANCE = 0.5;
+    public static final double ANGLE_P = 0.1;
+
     private DriveTrain driveTrain;
 
-    public PurePursuitCommand(Waypoint[] waypoints) {
+    private Trajectory trajectory;
+
+    public PurePursuitCommand(Trajectory trajectory) {
         driveTrain = Robot.getDriveTrain();
         requires(driveTrain);
+        this.trajectory = trajectory;
     }
 
-    public List<Waypoint> fill(Waypoint[] waypoints, double spacing) {
-        List<Waypoint> newPoints = new ArrayList<>();
-        newPoints.add(waypoints[0]);
-        for (int i = 0; i < waypoints.length - 1; i++) {
-            Vector vec = waypoints[i + 1].minus(waypoints[i]);
-            int numPointa = (int) Math.floor(vec.magnitude() / spacing); // Change to math.ceil()?
-            Vector spacingVec = vec.normalize().scalarMultiply(spacing);
-            for (int j = 0; j <= numPointa; j++) {
-                newPoints.add(waypoints[i].plus(spacingVec.scalarMultiply(j)));
-            }
-            newPoints.add(waypoints[i + 1]);
-        }
-        return newPoints;
-    }
+    private int segment;
+    private boolean done;
 
     /**
      * The initialize method is called the first time this Command is run after being started.
      */
     @Override
     protected void initialize() {
-        super.initialize();
+        segment = 0;
+        done = false;
     }
 
     /**
@@ -45,7 +40,21 @@ public class PurePursuitCommand extends Command {
      */
     @Override
     protected void execute() {
-        super.execute();
+        double x = Robot.getTrackedX();
+        double y = Robot.getTrackedY();
+
+        Trajectory.Segment seg = trajectory.get(segment);
+        if (AngleMath.distance(x, y, seg.x, seg.y) <= TOLERANCE) {
+            segment++;
+            done = segment >= trajectory.length();
+        } else {
+            double angle = Math.atan2(seg.y - y, seg.x - x);
+            double velocity = seg.velocity * M_PER_S_TO_ENC_UNITS;
+            double currentAngle = driveTrain.getRobotYaw();
+
+            double diff = ANGLE_P * AngleMath.shortestAngle(currentAngle, angle);
+            driveTrain.setSpeedsRaw(velocity - diff, velocity + diff);
+        }
     }
 
     /**
@@ -60,7 +69,7 @@ public class PurePursuitCommand extends Command {
      */
     @Override
     protected boolean isFinished() {
-        return false;
+        return done;
     }
 
     /**
@@ -69,7 +78,7 @@ public class PurePursuitCommand extends Command {
      */
     @Override
     protected void end() {
-        super.end();
+        driveTrain.setSpeedsPercent(0, 0);
     }
 
     /**
@@ -84,6 +93,6 @@ public class PurePursuitCommand extends Command {
      */
     @Override
     protected void interrupted() {
-        super.interrupted();
+        end();
     }
 }

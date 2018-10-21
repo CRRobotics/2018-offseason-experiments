@@ -187,6 +187,16 @@ public class DriveTrain extends Subsystem {
     }
 
     /**
+     * Takes velocity values in meters per second and sets speeds accordingly.
+     * @param left
+     * @param right
+     */
+    public void setSpeedsMPS(double left, double right) {
+        setCurrentControlMode(ControlMode.Velocity);
+        setSpeedsRaw(left * M_PER_S_TO_ENC_UNITS, right * M_PER_S_TO_ENC_UNITS);
+    }
+
+    /**
      * Returns the position of the left encoder
      * @return The position of the left encoder
      */

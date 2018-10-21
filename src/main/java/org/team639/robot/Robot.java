@@ -221,6 +221,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        driveTracker.collect();
 
         SmartDashboard.putString("Selected auto mode", autoSelector.getSelected().getClass().getSimpleName());
 

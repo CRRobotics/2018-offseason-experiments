@@ -29,6 +29,10 @@ public class Constants {
         public static final double WHEEL_DIAMETER_INCHES = 4;
         public static final double WHEEL_CIRCUMFERENCE_INCHES = Math.PI * WHEEL_DIAMETER_INCHES;
 
+        public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_CIRCUMFERENCE_INCHES * 2.54;
+
+        public static final double M_PER_S_TO_ENC_UNITS = 1 / 10 / WHEEL_CIRCUMFERENCE_METERS * 4096;
+
         public static final double ENC_TICKS_PER_ROTATION = 4096 * 3 * 54 / 30; // Quad encoder has 1024 ticks (* 4 = 4096). 3 and 54/30 are gear ratios.
         public static final double TICKS_PER_INCH = ENC_TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_INCHES;
 
