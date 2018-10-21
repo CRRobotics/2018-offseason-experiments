@@ -48,7 +48,7 @@ public class PurePursuitCommand extends Command {
             segment++;
             done = segment >= trajectory.length();
         } else {
-            double angle = Math.atan2(seg.y - y, seg.x - x);
+            double angle = Math.toDegrees(Math.atan2(seg.y - y, seg.x - x));
             double velocity = seg.velocity * M_PER_S_TO_ENC_UNITS;
             double currentAngle = driveTrain.getRobotYaw();
 
