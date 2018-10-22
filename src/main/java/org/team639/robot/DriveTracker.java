@@ -4,6 +4,7 @@ import org.team639.lib.math.AngleMath;
 import org.team639.robot.subsystems.DriveTrain;
 
 import static org.team639.robot.Constants.DriveTrain.TICKS_PER_INCH;
+import static org.team639.robot.Constants.DriveTrain.TICKS_PER_METER;
 
 /**
  * A class that approximates the position of the robot by monitoring the encoders and gyro.
@@ -28,8 +29,8 @@ public class DriveTracker {
      * Uses current information to update approximated position. Should be called as often as possible.
      */
     public void collect() {
-        double l = driveTrain.getLeftEncPos() / TICKS_PER_INCH;
-        double r = driveTrain.getRightEncPos() / TICKS_PER_INCH;
+        double l = driveTrain.getLeftEncPos() / TICKS_PER_METER;
+        double r = driveTrain.getRightEncPos() / TICKS_PER_METER;
         double a = driveTrain.getRobotYaw();
 
         double angle = a + AngleMath.shortestAngle(a, lastAngle) / 2;

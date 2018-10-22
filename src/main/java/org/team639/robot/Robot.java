@@ -185,7 +185,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         auto = autoSelector.getSelected();
         Position startPos = getStartingPosition().position;
-        driveTracker.reset(startPos.x, startPos.y);
+//        driveTracker.reset(startPos.x, startPos.y); TODO: PUT THIS BACK
+        driveTracker.reset(0, 0);
         driveTrain.zeroRobotYaw();
         auto.start();
         System.out.println("Auto started");

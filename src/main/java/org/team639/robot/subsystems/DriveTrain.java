@@ -193,6 +193,7 @@ public class DriveTrain extends Subsystem {
      */
     public void setSpeedsMPS(double left, double right) {
         setCurrentControlMode(ControlMode.Velocity);
+        System.out.println("uh oh: " + M_PER_S_TO_ENC_UNITS + "; left: " + left + "," + (left * M_PER_S_TO_ENC_UNITS) + "; right: " + right + ", " + (right * M_PER_S_TO_ENC_UNITS));
         setSpeedsRaw(left * M_PER_S_TO_ENC_UNITS, right * M_PER_S_TO_ENC_UNITS);
     }
 

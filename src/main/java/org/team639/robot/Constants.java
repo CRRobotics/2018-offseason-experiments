@@ -4,7 +4,7 @@ package org.team639.robot;
  * Constants used by the robot.
  */
 public class Constants {
-    public static final boolean REAL = false;
+    public static final boolean REAL = true;
 
     public static class DriveTrain {
         // TODO: Tune everything.
@@ -14,7 +14,7 @@ public class Constants {
         public static final double HIGH_DRIVE_P = 0.1;
         public static final double HIGH_DRIVE_I = 0;
         public static final double HIGH_DRIVE_D = 0;
-        public static final double HIGH_DRIVE_F = 1023/HIGH_SPEED_RANGE;
+        public static final double HIGH_DRIVE_F = 1023 / HIGH_SPEED_RANGE;
         public static final double HIGH_ARCADE_RATE = 0.03;
 
         public static final double LOW_MIN_DRIVE_PERCENT = 0.09;
@@ -29,12 +29,15 @@ public class Constants {
         public static final double WHEEL_DIAMETER_INCHES = 4;
         public static final double WHEEL_CIRCUMFERENCE_INCHES = Math.PI * WHEEL_DIAMETER_INCHES;
 
-        public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_CIRCUMFERENCE_INCHES * 2.54;
+        public static final double WHEEL_CIRCUMFERENCE_METERS = WHEEL_CIRCUMFERENCE_INCHES * 2.54 / 100;
 
-        public static final double M_PER_S_TO_ENC_UNITS = 1 / 10 / WHEEL_CIRCUMFERENCE_METERS * 4096;
+        public static final double M_PER_S_TO_ENC_UNITS = 1.0 / 10.0 / WHEEL_CIRCUMFERENCE_METERS * 4096;
+
+        public static final double MAX_SPEED_M_PER_S = HIGH_SPEED_RANGE / M_PER_S_TO_ENC_UNITS;
 
         public static final double ENC_TICKS_PER_ROTATION = 4096 * 3 * 54 / 30; // Quad encoder has 1024 ticks (* 4 = 4096). 3 and 54/30 are gear ratios.
         public static final double TICKS_PER_INCH = ENC_TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_INCHES;
+        public static final double TICKS_PER_METER = ENC_TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_METERS;
 
         public static final double DRIVE_FORWARD_TOLERANCE = 200;
 

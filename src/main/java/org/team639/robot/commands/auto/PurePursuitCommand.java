@@ -10,8 +10,8 @@ import static org.team639.robot.Constants.DriveTrain.M_PER_S_TO_ENC_UNITS;
 
 public class PurePursuitCommand extends Command {
 
-    public static final double TOLERANCE = 0.5;
-    public static final double ANGLE_P = 0.1;
+    public static final double TOLERANCE = 0.05;
+    public static final double ANGLE_P = 0.01;
 
     private DriveTrain driveTrain;
 
@@ -53,7 +53,8 @@ public class PurePursuitCommand extends Command {
             double currentAngle = driveTrain.getRobotYaw();
 
             double diff = ANGLE_P * AngleMath.shortestAngle(currentAngle, angle);
-            driveTrain.setSpeedsRaw(velocity - diff, velocity + diff);
+//            System.out.println("left: " + (velocity - diff) + ", right: " + (velocity + diff));
+            driveTrain.setSpeedsMPS(velocity - diff, velocity + diff);
         }
     }
 

@@ -2,8 +2,11 @@ package org.team639.robot;
 
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.*;
+
+import static org.team639.robot.Constants.REAL;
 
 /**
  * Contains references to all of the motors, sensors, pneumatics, etc. Controls access by the rest of the code from a central location.
@@ -50,11 +53,19 @@ public class RobotMap {
             leftDrive = new TalonSRX(3);
             rightDrive = new TalonSRX(0);
 
-            leftFollower1 = new TalonSRX(4);
-            leftFollower2 = new TalonSRX(5);
+            if (REAL) {
+                leftFollower1 = new VictorSPX(4);
+                leftFollower2 = new VictorSPX(5);
 
-            rightFollower1 = new TalonSRX(1);
-            rightFollower2 = new TalonSRX(2);
+                rightFollower1 = new VictorSPX(1);
+                rightFollower2 = new VictorSPX(2);
+            } else {
+                leftFollower1 = new TalonSRX(4);
+                leftFollower2 = new TalonSRX(5);
+
+                rightFollower1 = new TalonSRX(1);
+                rightFollower2 = new TalonSRX(2);
+            }
 
 
             driveShifter = new Solenoid(5);
