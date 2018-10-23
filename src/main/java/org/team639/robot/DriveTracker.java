@@ -31,7 +31,7 @@ public class DriveTracker {
     public void collect() {
         double l = driveTrain.getLeftEncPos() / TICKS_PER_METER;
         double r = driveTrain.getRightEncPos() / TICKS_PER_METER;
-        double a = driveTrain.getRobotYaw();
+        double a = driveTrain.getRobotAngle();
 
         double angle = a + AngleMath.shortestAngle(a, lastAngle) / 2;
         angle = AngleMath.constrainTo360(angle);
@@ -58,7 +58,7 @@ public class DriveTracker {
         lastRightDist = driveTrain.getRightEncPos() / TICKS_PER_INCH;
         lastLeftDist = driveTrain.getLeftEncPos() / TICKS_PER_INCH;
 
-        lastAngle = driveTrain.getRobotYaw();
+        lastAngle = driveTrain.getRobotAngle();
     }
 
     /**

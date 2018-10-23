@@ -50,7 +50,7 @@ public class PurePursuitCommand extends Command {
         } else {
             double angle = Math.toDegrees(Math.atan2(seg.y - y, seg.x - x));
             double velocity = seg.velocity * M_PER_S_TO_ENC_UNITS;
-            double currentAngle = driveTrain.getRobotYaw();
+            double currentAngle = driveTrain.getRobotAngle();
 
             double diff = ANGLE_P * AngleMath.shortestAngle(currentAngle, angle);
 //            System.out.println("left: " + (velocity - diff) + ", right: " + (velocity + diff));

@@ -50,9 +50,9 @@ public abstract class BasicAutoCommand extends AutoCommand {
     protected Position currentPosition() {
         if (getLastDestination().isPresent()) {
             Position pos = getLastDestination().get();
-            return new Position(pos.x, pos.y, Robot.getDriveTrain().getRobotYaw());
+            return new Position(pos.x, pos.y, Robot.getDriveTrain().getRobotAngle());
         } else {
-            return new Position(startPos.x, startPos.y, Robot.getDriveTrain().getRobotYaw());
+            return new Position(startPos.x, startPos.y, Robot.getDriveTrain().getRobotAngle());
         }
     }
 }

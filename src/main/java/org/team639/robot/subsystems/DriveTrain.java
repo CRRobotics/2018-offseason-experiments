@@ -233,12 +233,16 @@ public class DriveTrain extends Subsystem {
      * Gets the current yaw of the robot from 0-360 degrees, with 90 being directly downfield. This assumes that the robot starts facing downfield.
      * @return The current yaw of the robot
      */
-    public double getRobotYaw() {
+    public double getRobotAngle() {
         double angle = ahrs.getYaw();
         angle *= -1;
         angle += 90;
         if (angle < 0) angle = 360 + angle;
         return angle;
+    }
+
+    public double getRobotHeading() {
+        return ahrs.getYaw();
     }
 
     /**

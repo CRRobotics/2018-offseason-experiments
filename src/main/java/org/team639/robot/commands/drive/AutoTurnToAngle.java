@@ -56,7 +56,7 @@ public class AutoTurnToAngle extends Command {
     }
 
     protected void execute() {
-        double error = AngleMath.shortestAngle(driveTrain.getRobotYaw(), angle);
+        double error = AngleMath.shortestAngle(driveTrain.getRobotAngle(), angle);
 //        SmartDashboard.putNumber("angle error", error);
         double val = pid.compute(error);
         done = (val == 0);
@@ -65,7 +65,7 @@ public class AutoTurnToAngle extends Command {
 
     @Override
     protected boolean isFinished() {
-        return Math.abs(AngleMath.shortestAngle(driveTrain.getRobotYaw(), angle)) < TTA_TOLERANCE;
+        return Math.abs(AngleMath.shortestAngle(driveTrain.getRobotAngle(), angle)) < TTA_TOLERANCE;
     }
 
     @Override

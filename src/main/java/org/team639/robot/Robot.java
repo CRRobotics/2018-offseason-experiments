@@ -230,7 +230,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Left speed", driveTrain.getLeftEncVelocity());
         SmartDashboard.putNumber("Right speed", driveTrain.getRightEncVelocity());
 
-        SmartDashboard.putNumber("navx yaw", driveTrain.getRobotYaw());
+        SmartDashboard.putNumber("navx yaw", driveTrain.getRobotAngle());
 
 //        SmartDashboard.putNumber("left enc", driveTrain.getLeftEncPos());
 //        SmartDashboard.putNumber("right enc", driveTrain.getRightEncPos());

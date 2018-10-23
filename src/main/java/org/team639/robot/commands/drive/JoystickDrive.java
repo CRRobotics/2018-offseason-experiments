@@ -3,7 +3,6 @@ package org.team639.robot.commands.drive;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.team639.lib.controls.LogitechF310;
 import org.team639.lib.math.AngleMath;
 import org.team639.lib.math.PID;
 import org.team639.robot.Constants;
@@ -128,12 +127,12 @@ public class JoystickDrive extends Command {
         if (moveSpeed > 1) moveSpeed = 1;
         if (turnSpeed > 1) turnSpeed = 1;
         if (angle < 360) {
-            double error = AngleMath.shortestAngle(driveTrain.getRobotYaw(), angle);
+            double error = AngleMath.shortestAngle(driveTrain.getRobotAngle(), angle);
             output = turnPID.compute(error);
         } else {
             output = 0;
         }
-//        System.out.printf("error: %f, output: %f, angle: %f, speed: %f, l: %f, R: %f\n", AngleMath.shortestAngle(driveTrain.getRobotYaw(), angle), output, angle, moveSpeed, moveSpeed / 2 - output * turnSpeed, moveSpeed / 2 + output * turnSpeed);
+//        System.out.printf("error: %f, output: %f, angle: %f, speed: %f, l: %f, R: %f\n", AngleMath.shortestAngle(driveTrain.getRobotAngle(), angle), output, angle, moveSpeed, moveSpeed / 2 - output * turnSpeed, moveSpeed / 2 + output * turnSpeed);
         driveTrain.setSpeedsPercent(moveSpeed / 2 - output * turnSpeed, moveSpeed / 2 + output * turnSpeed);
     }
 

@@ -55,7 +55,7 @@ public class AutoDriveForward extends Command {
 
     protected void initialize() {
         done = false;
-        if (!useAbsoluteAngle) angle = driveTrain.getRobotYaw();
+        if (!useAbsoluteAngle) angle = driveTrain.getRobotAngle();
 
         targetLeft = driveTrain.getLeftEncPos() + targetTicks;
         targetRight = driveTrain.getRightEncPos() + targetTicks;
@@ -86,7 +86,7 @@ public class AutoDriveForward extends Command {
         rTickDiff = targetRight - driveTrain.getRightEncPos();
 
         double val = pid.compute((lTickDiff + rTickDiff)/2);
-        double error = AngleMath.shortestAngle(driveTrain.getRobotYaw(), angle);
+        double error = AngleMath.shortestAngle(driveTrain.getRobotAngle(), angle);
         double output = turnPID.compute(error);
         driveTrain.setSpeedsPercent(val - output, val + output);
         done = (val == 0);
